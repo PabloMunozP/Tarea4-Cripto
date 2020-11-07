@@ -34,7 +34,18 @@ Tiempo de inicio: 1604709989.3404071
 Tiempo de fin: 1604709996.590646
 Tiempo total: 7.25023889541626
 ----------------------------------
-
+Archivo: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\Hashes\archivo_4
+ Diccionario: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\diccionarios\diccionario_1.dict
+Tiempo de inicio: 1604722239.2256298
+Tiempo de fin: 1604722245.6991894
+Tiempo total: 6.473559617996216
+----------------------------------
+Archivo: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\Hashes\archivo_4
+ Diccionario: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\diccionarios\diccionario_2.dict
+Tiempo de inicio: 1604722258.1460648
+Tiempo de fin: 1604722260.4426517
+Tiempo total: 2.2965869903564453
+----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_5
  Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
 Tiempo de inicio: 1604711349.6062143
@@ -46,4 +57,10 @@ Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_5
 Tiempo de inicio: 1604711446.8029277
 Tiempo de fin: 1604711821.9792275
 Tiempo total: 375.17629981040955
+----------------------------------
+
+Contraseñas hasheadas con bcrypt: 4336
+Tiempo de inicio: 1604725433.6984663
+Tiempo de fin: 1604726451.5124118
+Tiempo total: 1017.8139455318451
 ----------------------------------

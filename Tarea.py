@@ -62,7 +62,7 @@ def crackear(archivo,diccionario,output_name='output.txt'):
         os.remove('hashcat.potfile')
         stop=time.time()
         tiempos=open(os.path.join(path_output,'tiempos.txt'),'a')
-        line ='Archivo: '+archivo+'\n Diccionario: '+ diccionario+'\nTiempo de inicio: '+ str(start)+ '\nTiempo de fin: '+str(stop)+'\nTiempo total: '+ str(stop-start)+'\n----------------------------------\n'
+        line ='Archivo: '+archivo+'\nDiccionario: '+ diccionario+'\nTiempo de inicio: '+ str(start)+ '\nTiempo de fin: '+str(stop)+'\nTiempo total: '+ str(stop-start)+'\n----------------------------------\n'
         tiempos.write(line)
 
         #se crea el archivo con las contraseñas encontradas
@@ -93,8 +93,37 @@ def get_pwds(output):
         print('Error: ',str(e))
 
 
-def hashear():
+def hashear(path_pwds):
+    salt=bcrypt.gensalt()
 
+    if path_pwds is not None:
+        try:
+            pwds_file=open(path_pwds,'r')
+            pwds_hash=open(os.path.join(path_output,'pwds_hash.txt'),'w')
+
+            counter=0
+            print('Inicia el proceso de hasheo')
+            start=time.time()
+            for line in pwds_file:
+                if line == '\n':
+                    break
+                line=line.strip()
+                hash=bcrypt.hashpw(line.encode(encoding='utf-8'),salt)
+                pwds_hash.write(hash.decode('utf-8')+'\n')
+                counter += 1
+            stop=time.time()
+
+            tiempos=open(os.path.join(path_output,'tiempos.txt'),'a')
+            line = 'Contraseñas hasheadas con bcrypt: '+ str(counter)+'\nTiempo de inicio: '+ str(start)+ '\nTiempo de fin: '+str(stop)+'\nTiempo total: '+ str(stop-start)+'\n----------------------------------\n'
+            tiempos.write(line)
+
+            print('Se termino el proceso de hasheo de las contraseñas en texto plano')
+
+
+
+
+        except Exception as e:
+            print('Error: ',str(e))
 
 
 
@@ -117,7 +146,7 @@ if __name__ == "__main__":
             if opcion == '1':
                 opciones_crackear()
             if opcion == '2':
-                pass
+                hashear(os.path.join(path_output,'pwds'))
             if opcion == '3':
                 exit()
     except KeyboardInterrupt:
