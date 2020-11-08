@@ -1,4 +1,4 @@
-import os,time,bcrypt
+import os,time,bcrypt,BG,socket,sys
 
 path_output=os.path.join(os.getcwd(),'outputs')
 path_hashcat= os.path.join(os.getcwd(),'hashcat-6.1.1')
@@ -41,7 +41,7 @@ def crackear(archivo,diccionario,output_name='output.txt'):
             1->0
             2->10
             3->10
-            4->0
+            4->1000
             5->1800
             ''')
         hash_mode=input('Ingrese el modo del hash a crackear: ')
@@ -105,18 +105,19 @@ def hashear(path_pwds):
             print('Inicia el proceso de hasheo')
             start=time.time()
             for line in pwds_file:
-                if line == '\n':
-                    break
                 line=line.strip()
-                hash=bcrypt.hashpw(line.encode(encoding='utf-8'),salt)
-                pwds_hash.write(hash.decode('utf-8')+'\n')
+                hash=bcrypt.hashpw(line.encode(encoding='UTF-8'),salt)
+                hash_data=hash.decode('UTF-8')
+                pwds_hash.write(hash_data+'\n')
                 counter += 1
+                print(counter,line,hash_data)
             stop=time.time()
-
+            pwds_file.close()
+            pwds_hash.close()
             tiempos=open(os.path.join(path_output,'tiempos.txt'),'a')
             line = 'Contraseñas hasheadas con bcrypt: '+ str(counter)+'\nTiempo de inicio: '+ str(start)+ '\nTiempo de fin: '+str(stop)+'\nTiempo total: '+ str(stop-start)+'\n----------------------------------\n'
             tiempos.write(line)
-
+            tiempos.close()
             print('Se termino el proceso de hasheo de las contraseñas en texto plano')
 
 
@@ -125,29 +126,63 @@ def hashear(path_pwds):
         except Exception as e:
             print('Error: ',str(e))
 
+def hash_toBin():
+    hashes=open(os.path.join(path_output,'pwds_hash.txt'),'r')
+    bin_hashes=[]
+
+    for line in hashes:
+        hash_byte_array=bytearray(line,'utf8')
+        hash_bytes=''
+        for byte in hash_byte_array:
+            bin_str=bin(byte)
+            hash_bytes+=bin_str[2:]
+        bin_hashes.append(hash_bytes)
+    return bin_hashes
+
+def conectar(p,q,X0,port):#este encripta con clave privada
+    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    s.connect((socket.gethostname(),port))
+    public_key=BG.key_generation(p,q)
+    print('Se enviara la clave publica al servidor para que este desencripte el mensaje.')
+    s.send(bytes(str(public_key),'utf-8'))
+    
+
 
 
 def menu():
     print('''Tarea 4 Pablo Muñoz Poblete
         1- Crackear contraseñas mediante
         2- Hashear contraseñas en texto plano
-        3- Salir
+        3- Encriptacion-Desencriptacion mediante sockets
+        4-Salir
      ''')
 
-
+def limpiar():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 if __name__ == "__main__":
     try:
         while True:
+            #limpiar()
             menu()
             opcion=input('Ingrese la opcion deseada: ')
-            while opcion not in ['1','2','3']:
+            while opcion not in ['1','2','3','4']:
                 opcion=input('Ingrese la opcion deseada: ')
             if opcion == '1':
                 opciones_crackear()
             if opcion == '2':
                 hashear(os.path.join(path_output,'pwds'))
             if opcion == '3':
+                # bin_hashes=hash_toBin()
+                # print(sys.getsizeof(bin_hashes[1]))
+                p=499
+                q=547
+                X0=159201
+                conectar(p,q,X0,3030)
+            if opcion == '4':
                 exit()
     except KeyboardInterrupt:
         exit()

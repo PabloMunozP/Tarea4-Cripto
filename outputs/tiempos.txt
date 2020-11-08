@@ -1,66 +1,65 @@
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_1
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
 Tiempo de inicio: 1604709585.6450605
 Tiempo de fin: 1604709587.842005
 Tiempo total: 2.19694447517395
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_1
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
 Tiempo de inicio: 1604709596.4604182
 Tiempo de fin: 1604709598.7895327
 Tiempo total: 2.3291144371032715
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_2
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
 Tiempo de inicio: 1604709636.6008382
 Tiempo de fin: 1604709638.9210775
 Tiempo total: 2.320239305496216
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_2
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
 Tiempo de inicio: 1604709668.136485
 Tiempo de fin: 1604709670.3296766
 Tiempo total: 2.1931915283203125
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_3
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
 Tiempo de inicio: 1604709912.7567935
 Tiempo de fin: 1604709914.925243
 Tiempo total: 2.1684494018554688
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_3
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
 Tiempo de inicio: 1604709989.3404071
 Tiempo de fin: 1604709996.590646
 Tiempo total: 7.25023889541626
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\Hashes\archivo_4
- Diccionario: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\diccionarios\diccionario_1.dict
+Diccionario: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\diccionarios\diccionario_1.dict
 Tiempo de inicio: 1604722239.2256298
 Tiempo de fin: 1604722245.6991894
 Tiempo total: 6.473559617996216
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\Hashes\archivo_4
- Diccionario: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\diccionarios\diccionario_2.dict
+Diccionario: C:\Users\frost\Desktop\Tarea4\Tarea4-Cripto\diccionarios\diccionario_2.dict
 Tiempo de inicio: 1604722258.1460648
 Tiempo de fin: 1604722260.4426517
 Tiempo total: 2.2965869903564453
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_5
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_1.dict
 Tiempo de inicio: 1604711349.6062143
 Tiempo de fin: 1604711402.9072418
 Tiempo total: 53.30102753639221
 ----------------------------------
 Archivo: C:\Users\frost\Desktop\ArchivoTarea4\Hashes\archivo_5
- Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
+Diccionario: C:\Users\frost\Desktop\ArchivoTarea4\diccionarios\diccionario_2.dict
 Tiempo de inicio: 1604711446.8029277
 Tiempo de fin: 1604711821.9792275
 Tiempo total: 375.17629981040955
 ----------------------------------
-
-Contraseñas hasheadas con bcrypt: 4336
-Tiempo de inicio: 1604725433.6984663
-Tiempo de fin: 1604726451.5124118
-Tiempo total: 1017.8139455318451
+Contraseï¿½as hasheadas con bcrypt: 4336
+Tiempo de inicio: 1604782758.740973
+Tiempo de fin: 1604783767.4822178
+Tiempo total: 1008.7412447929382
 ----------------------------------
