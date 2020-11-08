@@ -43,7 +43,7 @@ def key_generation(p,q):
         assert(q % 4 == 3)
         #creating N, public key
         N = p * q
-        print("Public Key =", N)
+        #print("Public Key =", N)
 
         #split_string_m = str(m)
         print('Llave generada')
@@ -59,10 +59,14 @@ def key_generation(p,q):
 def encrypt(msg,X0,key):
     X = []
     X.append(X0)
-
-
+    hash_byte_array=bytearray(msg,'utf8')
+    hash_bytes=''
+    for byte in hash_byte_array:
+        bin_str=bin(byte)
+        hash_bytes+=bin_str[2:]
+    
     b = ""
-    L = len(str(msg))
+    L = len(str(hash_bytes))
     for i in range(L):
         string_x = bin(X[-1])[2:]
         size = len(string_x)
@@ -71,19 +75,19 @@ def encrypt(msg,X0,key):
         new_x = (X[i] ** 2) % key
         X.append(new_x)
 
-    print("message =", str(msg))
+    #print("message =", str(msg))
     #print("b =", b)
-    str_m = str(msg)
+    str_m = str(hash_bytes)
 
     ciphertext = XOR(str_m, b)
-    print("Ciphertext =", ciphertext)
+    #print("Ciphertext =", ciphertext)
+
 
     XL = X[-1]
     X0 = X[0]
     XL_check = pow(X0,pow(2,L),key)
     assert (XL == XL_check)
-
-
+    
     #this tuple represents what is being sent to Alice
     sent_message = (ciphertext, XL)
     #y = sent_message[1]
@@ -95,10 +99,10 @@ def encrypt(msg,X0,key):
 #######################################################
 def decrypt(p,q,encrypted):
 
-    N=p*q
     ciphertext,XL=encrypted
+    XL=int(XL)
     L = len(str(ciphertext))
-
+    N=p*q
     firstExponent = (((p+1)//4)**L) % (p-1)
     firstPhrase = "({}^{}) mod {}".format(XL,firstExponent,p)
     r_p = pow(XL,firstExponent,p)
@@ -122,12 +126,11 @@ def decrypt(p,q,encrypted):
         NEWX.append(new_x)
 
     plaintext = XOR(ciphertext,b)
-    print("Plaintext  =", plaintext)
+    #print("Plaintext  =", plaintext)
     #print("Message m  =", m)
     return plaintext
     #checking decrypted ciphertext is the same as the original plaintext
-    assert(str(m) == str(plaintext))
-
+    #assert(str(m) == str(plaintext))
 
 
 if __name__ == "__main__":
@@ -145,9 +148,8 @@ if __name__ == "__main__":
         bin_str=bin(byte)
         hash_bytes+=bin_str[2:]
 
-    print(hash_bytes)
     key = key_generation(p,q)
-    encrypted = encrypt(hash_bytes,X0,key)
-    decrypted = decrypt(p,q,encrypted)
+    encrypted = encrypt(hash,X0,key)
+    #decrypted = decrypt(p,q,encrypted)
 
 

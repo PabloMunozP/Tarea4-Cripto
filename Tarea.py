@@ -24,7 +24,6 @@ def opciones_crackear():
     salida.close()
     crackear(hash_file,dict_file,output_file)
 
-
 def crackear(archivo,diccionario,output_name='output.txt'):
     try:
         cmd='hashcat.exe'
@@ -72,8 +71,6 @@ def crackear(archivo,diccionario,output_name='output.txt'):
     except Exception as e:
         print('Error: ', str(e))
 
-
-
 def get_pwds(output):
     try:
         input_file=open(output,'r')
@@ -91,7 +88,6 @@ def get_pwds(output):
 
     except Exception as e:
         print('Error: ',str(e))
-
 
 def hashear(path_pwds):
     salt=bcrypt.gensalt()
@@ -126,28 +122,26 @@ def hashear(path_pwds):
         except Exception as e:
             print('Error: ',str(e))
 
-def hash_toBin():
-    hashes=open(os.path.join(path_output,'pwds_hash.txt'),'r')
-    bin_hashes=[]
-
-    for line in hashes:
-        hash_byte_array=bytearray(line,'utf8')
-        hash_bytes=''
-        for byte in hash_byte_array:
-            bin_str=bin(byte)
-            hash_bytes+=bin_str[2:]
-        bin_hashes.append(hash_bytes)
-    return bin_hashes
-
-def conectar(p,q,X0,port):#este encripta con clave privada
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    s.connect((socket.gethostname(),port))
-    public_key=BG.key_generation(p,q)
-    print('Se enviara la clave publica al servidor para que este desencripte el mensaje.')
-    s.send(bytes(str(public_key),'utf-8'))
+def conectar(X0,port):#este encripta con clave publica 
+    server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server.connect((socket.gethostname(),port))
     
+    print('Esperando llave publica...')
+    public_key = server.recv(1024).decode('utf-8')
+    print('La llave publica es: ',public_key, '\nSe comienza a encriptar los hash')
+    
+    output=open(os.path.join(path_output,'pwds_encrypt.txt'),'w')
+    pwds_hashes=open(os.path.join(path_output,'pwds_hash.txt'),'r')
+    for line in pwds_hashes:
+        encrypted=BG.encrypt(line,X0,int(public_key))
+        output.write(str(encrypted[0])+','+str(encrypted[1])+'\n')
+    pwds_hashes.close()
+    output.close()
+    str_path=str(os.path.join(path_output,'pwds_encrypt.txt'))
+    server.sendall(bytes(str_path,'utf-8'))#Se envia la ruta del archivo
+    print('El archivo se ha enviado, ahora debe ser desencriptado por el servidor.\n')
 
-
+    print('Se guardaron los hash encriptados en ', str_path)
 
 def menu():
     print('''Tarea 4 Pablo Muñoz Poblete
@@ -176,12 +170,10 @@ if __name__ == "__main__":
             if opcion == '2':
                 hashear(os.path.join(path_output,'pwds'))
             if opcion == '3':
-                # bin_hashes=hash_toBin()
-                # print(sys.getsizeof(bin_hashes[1]))
                 p=499
                 q=547
                 X0=159201
-                conectar(p,q,X0,3030)
+                conectar(X0,3214)
             if opcion == '4':
                 exit()
     except KeyboardInterrupt:
