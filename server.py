@@ -18,11 +18,11 @@ def create_table(conn,table_statement):
     except Exception as e:
         print('Error:',e)
 
-def insert(conn,id,hash):
+def insert(conn,id,hash_ascii,hash_bin):
     try:
-        insert_statement='''INSERT INTO hashes(id,hash) VALUES(?,?);'''
+        insert_statement='''INSERT INTO hashes(id,hash_ascii,hash_bin) VALUES(?,?,?);'''
         cursor= conn.cursor()
-        cursor.execute(insert_statement,(id,hash))
+        cursor.execute(insert_statement,(id,hash_ascii,hash_bin))
         conn.commit()
     except Exception as e:
         print('Error:',e)
@@ -40,14 +40,15 @@ while True:
     cliente.sendall(bytes(str(key),'utf-8'))
     print('Se envio la clave publica\n')
     path=cliente.recv(1024).decode('utf-8')
-    print(path)
+    #print(path)
     print('Se ha recibido el archivo.\nSe inicia el proceso de desencriptacion.\n')
     output=open(path,'r')
     db=connect_db(os.path.join(path_outputs,'sqlite_db.db'))
        
     table_statement='''CREATE TABLE IF NOT EXISTS hashes(
          id integer PRIMARY KEY,
-         hash text NOT NULL); ''' 
+         hash_ascii text NOT NULL,
+         hash_bin text NOT NULL); ''' 
 
     if db is not None:
         create_table(db,table_statement)
@@ -60,12 +61,10 @@ while True:
             break
         line=line.strip()
         encrypted=line.split(',')
-        print(counter,'  ',len(encrypted))
+        #print(counter,'  ',len(encrypted))
         decrypted=BG.decrypt(p,q,encrypted)
-        insert(db,counter,decrypted)
+        insert(db,counter,BG.bin_toAscii(decrypted),decrypted)
         counter+=1
     print('Finalizo la desencriptacion y se guardaron los hash en un archivo sqlite.\n')
-    # except:
-    #     print('hubo un error al recibir los datos')
 
     

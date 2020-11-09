@@ -1,7 +1,7 @@
-import random
-import numpy
+#import random
+#import numpy
 import os
-import sys
+import sys,base64,json
 
 
 #function for checking if a number is prime
@@ -59,12 +59,12 @@ def key_generation(p,q):
 def encrypt(msg,X0,key):
     X = []
     X.append(X0)
-    hash_byte_array=bytearray(msg,'utf8')
+    print('mensaje a cifrar: ',msg)    
     hash_bytes=''
-    for byte in hash_byte_array:
-        bin_str=bin(byte)
-        hash_bytes+=bin_str[2:]
-    
+    for char in msg:
+        hash_bytes+=str(bin(ord(char))).replace('0b','')
+    #print(hash_bytes)
+
     b = ""
     L = len(str(hash_bytes))
     for i in range(L):
@@ -127,11 +127,20 @@ def decrypt(p,q,encrypted):
 
     plaintext = XOR(ciphertext,b)
     #print("Plaintext  =", plaintext)
-    #print("Message m  =", m)
     return plaintext
     #checking decrypted ciphertext is the same as the original plaintext
     #assert(str(m) == str(plaintext))
 
+
+def bin_toAscii(msg):
+    msg_split=[msg[i:i+6] for i in range(0,len(msg),6)]
+    #print(msg_split)
+    salida=''
+    for msg in msg_split:
+        while len(msg) < 6:
+            msg='0'+msg
+        salida+=chr(int(msg,base=2)+61)
+    return salida
 
 if __name__ == "__main__":
     #(p,q) Private key
@@ -139,17 +148,10 @@ if __name__ == "__main__":
     q=547 
     X0 =159201 
     hash= '$2b$12$T9wLk1D2C/Xt1NIHm65ri.hNH6hHFO1okTFKd2RlyRKj6EKqG8jly'
-    m = 10011100000100001100 # message 
-    
-
-    hash_byte_array=bytearray(hash,'utf8')
-    hash_bytes=''
-    for byte in hash_byte_array:
-        bin_str=bin(byte)
-        hash_bytes+=bin_str[2:]
+    m = '10010011001011000101001001100011100101001001010100111001111011110011001101011110001100010011001010000111011111011000111010011000110011101001001100100011011011101101101011110010110100110111011010001001110100100011011011010001001000100011010011111100011101111110101110101001000110100101111001001100101010010110110011110011010010100101111010101101101000101100101111100011000111111000110101011011001111001' # message 
 
     key = key_generation(p,q)
     encrypted = encrypt(hash,X0,key)
-    #decrypted = decrypt(p,q,encrypted)
+    decrypted = decrypt(p,q,encrypted)
 
 

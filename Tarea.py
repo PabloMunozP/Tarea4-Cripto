@@ -58,7 +58,10 @@ def crackear(archivo,diccionario,output_name='output.txt'):
         #print(os.getcwd(),'\n',cmd)
         start=time.time()
         os.system(cmd)
-        os.remove('hashcat.potfile')
+        try:
+            os.remove('hashcat.potfile')
+        except:
+            pass
         stop=time.time()
         tiempos=open(os.path.join(path_output,'tiempos.txt'),'a')
         line ='Archivo: '+archivo+'\nDiccionario: '+ diccionario+'\nTiempo de inicio: '+ str(start)+ '\nTiempo de fin: '+str(stop)+'\nTiempo total: '+ str(stop-start)+'\n----------------------------------\n'
@@ -102,11 +105,17 @@ def hashear(path_pwds):
             start=time.time()
             for line in pwds_file:
                 line=line.strip()
-                hash=bcrypt.hashpw(line.encode(encoding='UTF-8'),salt)
-                hash_data=hash.decode('UTF-8')
-                pwds_hash.write(hash_data+'\n')
+                if line == '\n':
+                    break
+                hash=bcrypt.hashpw(line.encode(encoding='ascii'),salt)
+                hash_data=hash.decode('ascii')
+                hash_bytes=''
+                for char in hash_data:
+                    #print(char,len(str(bin(ord(char))).replace('0b','')))
+                    hash_bytes+=str(bin(ord(char))).replace('0b','')
+                pwds_hash.write(hash_data+':'+BG.bin_toAscii(hash_bytes).strip()+':'+hash_bytes+'\n')
                 counter += 1
-                print(counter,line,hash_data)
+                #print(counter,line,hash_data)
             stop=time.time()
             pwds_file.close()
             pwds_hash.close()
@@ -127,25 +136,28 @@ def conectar(X0,port):#este encripta con clave publica
     server.connect((socket.gethostname(),port))
     
     print('Esperando llave publica...')
-    public_key = server.recv(1024).decode('utf-8')
+    public_key = server.recv(1024).decode('ascii')
     print('La llave publica es: ',public_key, '\nSe comienza a encriptar los hash')
     
     output=open(os.path.join(path_output,'pwds_encrypt.txt'),'w')
     pwds_hashes=open(os.path.join(path_output,'pwds_hash.txt'),'r')
     for line in pwds_hashes:
+        line=line.strip()
+        line=line.split(':')[0]
+        #print(line)
         encrypted=BG.encrypt(line,X0,int(public_key))
         output.write(str(encrypted[0])+','+str(encrypted[1])+'\n')
     pwds_hashes.close()
     output.close()
     str_path=str(os.path.join(path_output,'pwds_encrypt.txt'))
-    server.sendall(bytes(str_path,'utf-8'))#Se envia la ruta del archivo
+    server.sendall(bytes(str_path,'ascii'))#Se envia la ruta del archivo
     print('El archivo se ha enviado, ahora debe ser desencriptado por el servidor.\n')
 
     print('Se guardaron los hash encriptados en ', str_path)
 
 def menu():
     print('''Tarea 4 Pablo Muñoz Poblete
-        1- Crackear contraseñas mediante
+        1- Crackear contraseñas mediante Hashcat
         2- Hashear contraseñas en texto plano
         3- Encriptacion-Desencriptacion mediante sockets
         4-Salir
