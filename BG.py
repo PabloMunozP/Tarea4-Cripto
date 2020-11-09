@@ -62,9 +62,12 @@ def encrypt(msg,X0,key):
     print('mensaje a cifrar: ',msg)    
     hash_bytes=''
     for char in msg:
-        hash_bytes+=str(bin(ord(char))).replace('0b','')
+        bin_text=str(bin(ord(char))).replace('0b','')
+        while len(bin_text)<7:
+            bin_text= '0'+bin_text
+        #print(char,len(bin_text))
+        hash_bytes+=bin_text
     #print(hash_bytes)
-
     b = ""
     L = len(str(hash_bytes))
     for i in range(L):
@@ -80,7 +83,7 @@ def encrypt(msg,X0,key):
     str_m = str(hash_bytes)
 
     ciphertext = XOR(str_m, b)
-    #print("Ciphertext =", ciphertext)
+    print("Ciphertext =", bin_toAscii(ciphertext))
 
 
     XL = X[-1]
@@ -126,20 +129,20 @@ def decrypt(p,q,encrypted):
         NEWX.append(new_x)
 
     plaintext = XOR(ciphertext,b)
-    #print("Plaintext  =", plaintext)
+    print("Plaintext  =", bin_toAscii(plaintext))
     return plaintext
     #checking decrypted ciphertext is the same as the original plaintext
     #assert(str(m) == str(plaintext))
 
 
 def bin_toAscii(msg):
-    msg_split=[msg[i:i+6] for i in range(0,len(msg),6)]
+    msg_split=[msg[i:i+7] for i in range(0,len(msg),7)]
     #print(msg_split)
     salida=''
     for msg in msg_split:
-        while len(msg) < 6:
+        while len(msg) < 7:
             msg='0'+msg
-        salida+=chr(int(msg,base=2)+61)
+        salida+=chr(int(msg,base=2))
     return salida
 
 if __name__ == "__main__":
