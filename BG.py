@@ -34,6 +34,7 @@ def modInverse(a, m) :
 #######################################################
 ###########         Key Generation          ###########
 #######################################################
+
 def key_generation(p,q):
     try:
         #making sure p and q are congruent to 
@@ -56,10 +57,11 @@ def key_generation(p,q):
 #######################################################
 ###########            Encryption           ###########
 #######################################################
+
 def encrypt(msg,X0,key):
     X = []
     X.append(X0)
-    print('mensaje a cifrar: ',msg)    
+    #print('mensaje a cifrar: ',msg)    
     hash_bytes=''
     for char in msg:
         bin_text=str(bin(ord(char))).replace('0b','')
@@ -81,11 +83,8 @@ def encrypt(msg,X0,key):
     #print("message =", str(msg))
     #print("b =", b)
     str_m = str(hash_bytes)
-
     ciphertext = XOR(str_m, b)
-    print("Ciphertext =", bin_toAscii(ciphertext))
-
-
+    #print("Ciphertext =", bin_toAscii(ciphertext))
     XL = X[-1]
     X0 = X[0]
     XL_check = pow(X0,pow(2,L),key)
@@ -129,7 +128,7 @@ def decrypt(p,q,encrypted):
         NEWX.append(new_x)
 
     plaintext = XOR(ciphertext,b)
-    print("Plaintext  =", bin_toAscii(plaintext))
+    #print("Plaintext  =", bin_toAscii(plaintext))
     return plaintext
     #checking decrypted ciphertext is the same as the original plaintext
     #assert(str(m) == str(plaintext))

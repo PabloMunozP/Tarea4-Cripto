@@ -1,4 +1,4 @@
-import os,time,bcrypt,BG,socket,sys
+import os,time,bcrypt,BG,socket,sys,pickle
 
 path_output=os.path.join(os.getcwd(),'outputs')
 path_hashcat= os.path.join(os.getcwd(),'hashcat-6.1.1')
@@ -107,13 +107,9 @@ def hashear(path_pwds):
                 line=line.strip()
                 if line == '\n':
                     break
-                hash=bcrypt.hashpw(line.encode(encoding='ascii'),salt)
-                hash_data=hash.decode('ascii')
-                hash_bytes=''
-                for char in hash_data:
-                    #print(char,len(str(bin(ord(char))).replace('0b','')))
-                    hash_bytes+=str(bin(ord(char))).replace('0b','')
-                pwds_hash.write(hash_data+':'+BG.bin_toAscii(hash_bytes).strip()+':'+hash_bytes+'\n')
+                hash=bcrypt.hashpw(line.encode(encoding='utf-8'),salt)
+                hash_data=hash.decode('utf-8')
+                pwds_hash.write(hash_data+'\n')
                 counter += 1
                 #print(counter,line,hash_data)
             stop=time.time()
@@ -123,7 +119,8 @@ def hashear(path_pwds):
             line = 'Contraseñas hasheadas con bcrypt: '+ str(counter)+'\nTiempo de inicio: '+ str(start)+ '\nTiempo de fin: '+str(stop)+'\nTiempo total: '+ str(stop-start)+'\n----------------------------------\n'
             tiempos.write(line)
             tiempos.close()
-            print('Se termino el proceso de hasheo de las contraseñas en texto plano')
+            print('Se termino el proceso de hasheo de las contraseñas en texto plano\n')
+            print(line)
 
 
 
@@ -139,21 +136,19 @@ def conectar(X0,port):#este encripta con clave publica
     public_key = server.recv(1024).decode('ascii')
     print('La llave publica es: ',public_key, '\nSe comienza a encriptar los hash')
     
-    output=open(os.path.join(path_output,'pwds_encrypt.txt'),'w')
-    pwds_hashes=open(os.path.join(path_output,'pwds_hash.txt'),'r')
+    pwds_hashes=open(os.path.join(path_output,'pwds_hash.txt'),'r').readlines()
+    HEADERSIZE=10
     for line in pwds_hashes:
         line=line.strip()
-        line=line.split(':')[0]
-        #print(line)
+        print(line)
         encrypted=BG.encrypt(line,X0,int(public_key))
-        output.write(str(encrypted[0])+','+str(encrypted[1])+'\n')
-    pwds_hashes.close()
-    output.close()
-    str_path=str(os.path.join(path_output,'pwds_encrypt.txt'))
-    server.sendall(bytes(str_path,'ascii'))#Se envia la ruta del archivo
-    print('El archivo se ha enviado, ahora debe ser desencriptado por el servidor.\n')
-
-    print('Se guardaron los hash encriptados en ', str_path)
+        msg=pickle.dumps(encrypted)
+        msg=bytes(f'{len(msg):<{HEADERSIZE}}','utf-8')+msg
+        server.send(msg)
+        server.recv(1024)
+        time.sleep(0.1)
+    print('El archivo se ha enviado y fue desencriptado por el servidor.\n')
+    
 
 def menu():
     print('''Tarea 4 Pablo Muñoz Poblete
@@ -172,7 +167,7 @@ def limpiar():
 if __name__ == "__main__":
     try:
         while True:
-            #limpiar()
+            limpiar()
             menu()
             opcion=input('Ingrese la opcion deseada: ')
             while opcion not in ['1','2','3','4']:
@@ -184,7 +179,7 @@ if __name__ == "__main__":
             if opcion == '3':
                 p=499
                 q=547
-                X0=159201
+                X0=159201 #399^2
                 conectar(X0,3214)
             if opcion == '4':
                 exit()
